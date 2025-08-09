@@ -19,9 +19,6 @@ RUN apt-get update && apt-get install -y \
     libgd-dev \
     jpegoptim optipng pngquant gifsicle \
     vim \
-    unzip \
-    git \
-    curl \
     nginx \
     supervisor
 
@@ -34,10 +31,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy existing application directory contents
+# Copy application code and set permissions
 COPY . /var/www/html
-
-# Copy existing application directory permissions
 COPY --chown=www-data:www-data . /var/www/html
 
 # Set permissions
@@ -61,4 +56,4 @@ RUN mkdir -p /var/log/supervisor
 EXPOSE 80
 
 # Start supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"] 
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
